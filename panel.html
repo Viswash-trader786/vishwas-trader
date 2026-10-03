@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vishwas Trader — Admin Panel</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--ink:#172033;--muted:#6b7280;--line:#e5e7eb;--primary:#1f4b99;--primary2:#173a77;--danger:#c83a3a;--success:#157347;--shadow:0 12px 35px rgba(20,30,50,.08);--r:14px}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif}
+button,input,select,textarea{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+.login{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(135deg,#eef4ff,#f8fafc)}
+.login-card{width:min(420px,100%);background:#fff;border:1px solid var(--line);border-radius:22px;padding:32px;box-shadow:var(--shadow)}
+.brand{display:flex;gap:12px;align-items:center;margin-bottom:25px}.brand-icon{width:46px;height:46px;border-radius:12px;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:900}.brand h1{font-size:19px;margin:0}.brand small{color:var(--muted)}
+.field{margin:0 0 13px}.field label{display:block;font-size:12px;font-weight:750;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:9px;padding:11px 12px;outline:none;background:#fff}.field textarea{min-height:90px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:#9db2d7;box-shadow:0 0 0 3px #1f4b9914}
+.btn{border:0;border-radius:9px;padding:10px 14px;font-weight:750}.primary{background:var(--primary);color:#fff}.primary:hover{background:var(--primary2)}.secondary{background:#fff;border:1px solid var(--line)}.danger{background:#fff;color:var(--danger);border:1px solid #efcaca}.full{width:100%}
+.error{background:#fff1f1;color:#a12828;border:1px solid #f0cccc;border-radius:9px;padding:10px;font-size:12px;margin-bottom:12px}
+.app{min-height:100vh;display:grid;grid-template-columns:250px 1fr}.sidebar{background:#111821;color:#fff;padding:22px 15px;position:sticky;top:0;height:100vh}.side-brand{display:flex;gap:10px;align-items:center;padding:4px 9px 25px}.side-brand .brand-icon{background:#fff;color:#111821;width:38px;height:38px}.side-brand strong{font-size:14px}.side-brand small{display:block;color:#9aa5b5;font-size:10px;margin-top:2px}.nav button{width:100%;text-align:left;border:0;background:transparent;color:#b9c2cf;padding:11px 12px;border-radius:9px;margin:2px 0;font-size:12px}.nav button.active,.nav button:hover{background:#202b39;color:#fff}.sidebar-bottom{position:absolute;bottom:18px;left:15px;right:15px}.main{min-width:0}.topbar{height:68px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 25px;position:sticky;top:0;z-index:10}.topbar h2{font-size:18px;margin:0}.userbox{font-size:11px;color:var(--muted)}.content{padding:25px;max-width:1500px;margin:auto}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}.stat{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:0 3px 12px #11182108}.stat span{font-size:11px;color:var(--muted)}.stat strong{display:block;font-size:25px;margin-top:5px}.panel{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:0 3px 12px #11182108;margin-bottom:18px;overflow:hidden}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 18px;border-bottom:1px solid var(--line)}.panel-head h3{margin:0;font-size:14px}.toolbar{display:flex;gap:8px;flex-wrap:wrap}.toolbar input,.toolbar select{height:38px;border:1px solid var(--line);border-radius:8px;padding:0 10px;font-size:12px}.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;min-width:850px}.table th,.table td{padding:12px 14px;border-bottom:1px solid #edf0f4;text-align:left;font-size:11px;vertical-align:middle}.table th{background:#fafbfc;color:#667085;font-size:10px;text-transform:uppercase;letter-spacing:.5px}.thumb{width:44px;height:44px;border-radius:8px;object-fit:cover;background:#f1f3f6;display:grid;place-items:center;font-size:22px}.badge{display:inline-block;border-radius:999px;padding:4px 8px;font-size:9px;font-weight:800}.green{background:#eaf7ef;color:#157347}.orange{background:#fff5df;color:#946200}.red{background:#fff0f0;color:#a12828}.actions{display:flex;gap:5px}.iconbtn{width:31px;height:31px;border:1px solid var(--line);border-radius:7px;background:#fff}.empty{text-align:center;padding:40px;color:var(--muted);font-size:12px}.modal{position:fixed;inset:0;background:#0b121c99;display:none;place-items:center;padding:15px;z-index:50}.modal.show{display:grid}.modal-card{width:min(700px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:17px;padding:22px;box-shadow:0 25px 70px #0003}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.modal-head h3{margin:0;font-size:18px}.x{border:1px solid var(--line);background:#fff;border-radius:8px;width:32px;height:32px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.form-grid .full-field{grid-column:1/-1}.preview{width:100%;height:160px;border:1px dashed #cfd6e2;border-radius:10px;display:grid;place-items:center;overflow:hidden;background:#fafbfc;color:var(--muted);margin-bottom:12px}.preview img{width:100%;height:100%;object-fit:contain}.notice{padding:11px 13px;background:#eef4ff;border:1px solid #d8e4fb;border-radius:9px;font-size:11px;color:#36527f;margin-bottom:15px}.price-tool{display:grid;grid-template-columns:1fr 130px 150px;gap:8px;align-items:end}.order-items{font-size:11px;color:#667085;line-height:1.7}.status-select{padding:6px;border:1px solid var(--line);border-radius:7px;font-size:10px}
+@media(max-width:900px){.app{grid-template-columns:1fr}.sidebar{height:auto;position:relative;padding:10px}.side-brand{padding:5px 8px 10px}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap;width:auto}.sidebar-bottom{position:static;margin-top:8px}.stats{grid-template-columns:1fr 1fr}.topbar{padding:0 15px}.content{padding:15px}}
+@media(max-width:600px){.stats{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}.form-grid .full-field{grid-column:auto}.price-tool{grid-template-columns:1fr}.userbox{display:none}}
+</style>
+</head>
+<body>
+
+<section id="loginScreen" class="login">
+  <div class="login-card">
+    <div class="brand"><div class="brand-icon">VT</div><div><h1>Vishwas Trader</h1><small>Secure Admin Console</small></div></div>
+    <div id="loginError" class="error hidden"></div>
+    <div class="field"><label>Admin Email</label><input id="loginEmail" type="email" placeholder="admin@example.com"></div>
+    <div class="field"><label>Password</label><input id="loginPassword" type="password" placeholder="••••••••"></div>
+    <button class="btn primary full" onclick="login()">Sign In</button>
+    <p style="font-size:10px;color:#7a8596;margin:14px 0 0">Firebase Authentication must be enabled and this email must have access to the admin panel.</p>
+  </div>
+</section>
+
+<div id="app" class="app hidden">
+  <aside class="sidebar">
+    <div class="side-brand"><div class="brand-icon">VT</div><div><strong>Vishwas Trader</strong><small>ADMIN PANEL</small></div></div>
+    <nav class="nav">
+      <button class="active" data-page="dashboard" onclick="showPage('dashboard',this)">📊 Dashboard</button>
+      <button data-page="products" onclick="showPage('products',this)">📦 Products</button>
+      <button data-page="orders" onclick="showPage('orders',this)">🛒 Orders</button>
+      <button data-page="categories" onclick="showPage('categories',this)">📂 Categories</button>
+      <button data-page="pricing" onclick="showPage('pricing',this)">💰 Auto Price Update</button>
+    </nav>
+    <div class="sidebar-bottom"><button class="btn secondary full" onclick="logout()">Sign Out</button></div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar"><h2 id="pageTitle">Dashboard</h2><div class="userbox" id="userEmail"></div></header>
+    <div class="content">
+
+      <section id="page-dashboard">
+        <div class="stats">
+          <div class="stat"><span>Total Products</span><strong id="statProducts">0</strong></div>
+          <div class="stat"><span>Low Stock</span><strong id="statStock">0</strong></div>
+          <div class="stat"><span>Total Orders</span><strong id="statOrders">0</strong></div>
+          <div class="stat"><span>Revenue</span><strong id="statRevenue">₹0</strong></div>
+        </div>
+        <div class="panel"><div class="panel-head"><h3>Recent Orders</h3><button class="btn secondary" onclick="showPage('orders',document.querySelector('[data-page=orders]'))">View All</button></div><div class="table-wrap"><table class="table"><thead><tr><th>Order</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th></tr></thead><tbody id="recentOrders"></tbody></table></div></div>
+      </section>
+
+      <section id="page-products" class="hidden">
+        <div class="panel">
+          <div class="panel-head"><h3>Product Management</h3><div class="toolbar"><input id="productSearch" placeholder="Search..." oninput="renderProducts()"><select id="productCategoryFilter" onchange="renderProducts()"><option value="All">All Categories</option></select><button class="btn primary" onclick="openProductModal()">＋ Add Product</button></div></div>
+          <div class="table-wrap"><table class="table"><thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Old Price</th><th>Stock</th><th>Rating</th><th>Actions</th></tr></thead><tbody id="productsBody"></tbody></table></div>
+        </div>
+      </section>
+
+      <section id="page-orders" class="hidden">
+        <div class="panel">
+          <div class="panel-head"><h3>Order Management</h3><div class="toolbar"><input id="orderSearch" placeholder="Order/customer..." oninput="renderOrders()"><select id="orderStatusFilter" onchange="renderOrders()"><option value="All">All Status</option><option>Pending</option><option>Processing</option><option>Shipped</option><option>Delivered</option><option>Cancelled</option></select></div></div>
+          <div class="table-wrap"><table class="table"><thead><tr><th>Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Payment</th><th>Status</th><th>Date</th></tr></thead><tbody id="ordersBody"></tbody></table></div>
+        </div>
+      </section>
+
+      <section id="page-categories" class="hidden">
+        <div class="panel"><div class="panel-head"><h3>Category Management</h3><button class="btn primary" onclick="addCategory()">＋ Add Category</button></div><div class="table-wrap"><table class="table"><thead><tr><th>Category</th><th>Products</th><th>Actions</th></tr></thead><tbody id="categoriesBody"></tbody></table></div></div>
+      </section>
+
+      <section id="page-pricing" class="hidden">
+        <div class="panel"><div class="panel-head"><h3>Bulk / Automatic Price Update</h3></div><div style="padding:18px">
+          <div class="notice">Apply a percentage increase or decrease to products. The change is written directly to Firestore.</div>
+          <div class="price-tool">
+            <div class="field"><label>Category</label><select id="bulkCategory"><option value="All">All Categories</option></select></div>
+            <div class="field"><label>Change %</label><input id="bulkPercent" type="number" step="0.01" placeholder="10"></div>
+            <button class="btn primary" onclick="bulkPriceUpdate()">Apply Price Update</button>
+          </div>
+        </div></div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<div id="productModal" class="modal">
+  <div class="modal-card">
+    <div class="modal-head"><h3 id="productModalTitle">Add Product</h3><button class="x" onclick="closeProductModal()">×</button></div>
+    <form onsubmit="saveProduct(event)">
+      <input id="productId" type="hidden">
+      <div class="form-grid">
+        <div class="field"><label>Product Name *</label><input id="pName" required></div>
+        <div class="field"><label>Category *</label><select id="pCategory" required></select></div>
+        <div class="field"><label>Sale Price *</label><input id="pPrice" type="number" min="0" required></div>
+        <div class="field"><label>Old / MRP Price</label><input id="pOldPrice" type="number" min="0"></div>
+        <div class="field"><label>Stock *</label><input id="pStock" type="number" min="0" required></div>
+        <div class="field"><label>Rating</label><input id="pRating" type="number" min="0" max="5" step=".1" value="4.5"></div>
+        <div class="field full-field"><label>Description</label><textarea id="pDescription"></textarea></div>
+        <div class="field full-field"><label>Product Image</label><input id="pImage" type="file" accept="image/*" onchange="previewImage(event)"></div>
+        <div class="full-field preview" id="imagePreview">No image selected</div>
+      </div>
+      <button class="btn primary full" id="saveProductBtn">Save Product</button>
+    </form>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, getDoc, serverTimestamp, writeBatch } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-storage.js";
+
+/* =========================================================
+   1) PASTE YOUR FIREBASE WEB APP CONFIG HERE
+   Firebase Console → Project settings → Your apps → Web app
+   ========================================================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyCZxLdkOrDK4Mt-fx_BTkpnZNSYC60SUL0",
+  authDomain: "viswash-trader.firebaseapp.com",
+  projectId: "viswash-trader",
+  storageBucket: "viswash-trader.firebasestorage.app",
+  messagingSenderId: "940152888548",
+  appId: "1:940152888548:web:cca902480c3fa6b2daa0f1",
+  measurementId: "G-Z8N4TL6K80"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+let products = [];
+let orders = [];
+let categories = [];
+let unsubscribeBusy = false;
+
+const $ = id => document.getElementById(id);
+const money = n => "₹" + Number(n || 0).toLocaleString("en-IN");
+
+window.login = async function(){
+  const error = $("loginError");
+  error.classList.add("hidden");
+  try{
+    await signInWithEmailAndPassword(auth,$("loginEmail").value.trim(),$("loginPassword").value);
+  }catch(e){
+    error.textContent = e.code === "auth/invalid-credential" ? "Invalid email or password." : e.message;
+    error.classList.remove("hidden");
+  }
+};
+
+window.logout = () => signOut(auth);
+
+onAuthStateChanged(auth, async user => {
+  if(user){
+    try {
+      // Only users whose UID is listed in Firestore admins/{uid} can open this panel.
+      const adminSnap = await getDoc(doc(db, "admins", user.uid));
+      if (!adminSnap.exists() || adminSnap.data().active === false) {
+        await signOut(auth);
+        $("loginError").textContent = "This account is not authorized to use the admin panel. Ask the site owner to grant admin access.";
+        $("loginError").classList.remove("hidden");
+        $("app").classList.add("hidden");
+        $("loginScreen").classList.remove("hidden");
+        return;
+      }
+      $("loginError").classList.add("hidden");
+      $("loginScreen").classList.add("hidden");
+      $("app").classList.remove("hidden");
+      $("userEmail").textContent = user.email || "";
+      await loadAll();
+    } catch (e) {
+      await signOut(auth);
+      $("loginError").textContent = "Admin access check failed. Check Firestore rules and the admins/{UID} document. " + e.message;
+      $("loginError").classList.remove("hidden");
+      $("app").classList.add("hidden");
+      $("loginScreen").classList.remove("hidden");
+    }
+  }else{
+    $("app").classList.add("hidden");
+    $("loginScreen").classList.remove("hidden");
+  }
+});
+
+async function loadAll(){
+  if(unsubscribeBusy) return;
+  unsubscribeBusy = true;
+  try{
+    const [pSnap,oSnap,cSnap] = await Promise.all([
+      getDocs(collection(db,"products")),
+      getDocs(collection(db,"orders")),
+      getDocs(collection(db,"categories"))
+    ]);
+    products = pSnap.docs.map(d=>({id:d.id,...d.data()}));
+    orders = oSnap.docs.map(d=>({id:d.id,...d.data()}));
+    categories = cSnap.docs.map(d=>({id:d.id,...d.data()}));
+    if(!categories.length) categories = ["Electronics","Computer","Mobile","Home","Office","Daily"].map(name=>({id:name,name}));
+    refreshUI();
+  }catch(e){ alert("Firebase data load failed: "+e.message); }
+  unsubscribeBusy = false;
+}
+
+function refreshUI(){
+  populateCategoryControls();
+  renderProducts(); renderOrders(); renderCategories(); renderDashboard();
+}
+
+function populateCategoryControls(){
+  const names = categories.map(c=>c.name).filter(Boolean);
+  ["productCategoryFilter","bulkCategory"].forEach(id=>{
+    const el=$(id), current=el.value;
+    el.innerHTML='<option value="All">All Categories</option>'+names.map(n=>`<option>${escapeHtml(n)}</option>`).join("");
+    if(names.includes(current)) el.value=current;
+  });
+  $("pCategory").innerHTML=names.map(n=>`<option>${escapeHtml(n)}</option>`).join("");
+}
+
+window.showPage = function(page,btn){
+  document.querySelectorAll('[id^="page-"]').forEach(x=>x.classList.add("hidden"));
+  $("page-"+page).classList.remove("hidden");
+  document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));
+  if(btn) btn.classList.add("active");
+  $("pageTitle").textContent={dashboard:"Dashboard",products:"Products",orders:"Orders",categories:"Categories",pricing:"Auto Price Update"}[page];
+};
+
+function renderDashboard(){
+  $("statProducts").textContent=products.length;
+  $("statStock").textContent=products.filter(p=>Number(p.stock||0)<=5).length;
+  $("statOrders").textContent=orders.length;
+  $("statRevenue").textContent=money(orders.filter(o=>o.status!=="Cancelled").reduce((s,o)=>s+Number(o.total||0),0));
+  const recent=[...orders].sort((a,b)=>String(b.date||"").localeCompare(String(a.date||""))).slice(0,8);
+  $("recentOrders").innerHTML=recent.length?recent.map(o=>`<tr><td><strong>${escapeHtml(o.orderNumber||o.id)}</strong></td><td>${escapeHtml(o.customer?.name||"-")}</td><td>${money(o.total)}</td><td>${statusBadge(o.status||"Pending")}</td><td>${escapeHtml(o.date||"-")}</td></tr>`).join(""):`<tr><td colspan="5" class="empty">No orders yet.</td></tr>`;
+}
+
+window.renderProducts = function(){
+  const q=($("productSearch")?.value||"").toLowerCase(), cat=$("productCategoryFilter")?.value||"All";
+  const list=products.filter(p=>(p.name||"").toLowerCase().includes(q)&&(cat==="All"||p.category===cat));
+  $("productsBody").innerHTML=list.length?list.map(p=>`
+    <tr>
+      <td><div style="display:flex;gap:10px;align-items:center"><div class="thumb">${p.imageUrl?`<img class="thumb" src="${escapeAttr(p.imageUrl)}">`:escapeHtml(p.icon||"🛍️")}</div><div><strong>${escapeHtml(p.name)}</strong><div style="color:#7a8596">${escapeHtml(p.description||"").slice(0,45)}</div></div></div></td>
+      <td>${escapeHtml(p.category||"-")}</td><td><strong>${money(p.price)}</strong></td><td>${money(p.oldPrice)}</td>
+      <td>${Number(p.stock||0)<=5?'<span class="badge red">'+Number(p.stock||0)+'</span>':'<span class="badge green">'+Number(p.stock||0)+'</span>'}</td>
+      <td>★ ${Number(p.rating||0).toFixed(1)}</td>
+      <td><div class="actions"><button class="iconbtn" title="Edit" onclick="openProductModal('${p.id}')">✏️</button><button class="iconbtn" title="Delete" onclick="deleteProduct('${p.id}')">🗑️</button></div></td>
+    </tr>`).join(""):`<tr><td colspan="7" class="empty">No products found.</td></tr>`;
+};
+
+window.openProductModal = function(id){
+  const p=products.find(x=>x.id===id);
+  $("productModalTitle").textContent=p?"Edit Product":"Add Product";
+  $("productId").value=p?.id||"";
+  $("pName").value=p?.name||"";$("pCategory").value=p?.category||categories[0]?.name||"";
+  $("pPrice").value=p?.price??"";$("pOldPrice").value=p?.oldPrice??"";$("pStock").value=p?.stock??0;
+  $("pRating").value=p?.rating??4.5;$("pDescription").value=p?.description||"";$("pImage").value="";
+  $("imagePreview").innerHTML=p?.imageUrl?`<img src="${escapeAttr(p.imageUrl)}">`:"No image selected";
+  $("productModal").classList.add("show");
+};
+window.closeProductModal=()=> $("productModal").classList.remove("show");
+
+window.previewImage = e => {
+  const file=e.target.files[0]; if(!file)return;
+  $("imagePreview").innerHTML=`<img src="${URL.createObjectURL(file)}">`;
+};
+
+window.saveProduct = async function(e){
+  e.preventDefault();
+  const id=$("productId").value, file=$("pImage").files[0];
+  const old=products.find(p=>p.id===id);
+  $("saveProductBtn").disabled=true;
+  try{
+    let imageUrl=old?.imageUrl||"";
+    if(file){
+      const safe=file.name.replace(/[^a-z0-9._-]/gi,"_");
+      const storageRef=ref(storage,`products/${Date.now()}_${safe}`);
+      await uploadBytes(storageRef,file);
+      imageUrl=await getDownloadURL(storageRef);
+    }
+    const data={name:$("pName").value.trim(),category:$("pCategory").value,price:Number($("pPrice").value),oldPrice:Number($("pOldPrice").value||$("pPrice").value),stock:Number($("pStock").value),rating:Number($("pRating").value||0),description:$("pDescription").value.trim(),imageUrl,updatedAt:serverTimestamp()};
+    if(id) await updateDoc(doc(db,"products",id),data); else await addDoc(collection(db,"products"),{...data,createdAt:serverTimestamp()});
+    closeProductModal(); await loadAll(); alert(id?"Product updated successfully.":"Product added successfully.");
+  }catch(err){alert("Could not save product: "+err.message)}
+  $("saveProductBtn").disabled=false;
+};
+
+window.deleteProduct = async function(id){
+  const p=products.find(x=>x.id===id);
+  if(!p||!confirm(`Delete "${p.name}"? This cannot be undone.`))return;
+  try{
+    // Remove the Firestore product document. Previously uploaded images can be removed separately in Firebase Storage.
+    await deleteDoc(doc(db,"products",id));
+    await loadAll();
+    alert("Product deleted successfully.");
+  }catch(e){alert("Delete failed: "+e.message)}
+};
+
+window.renderOrders = function(){
+  const q=($("orderSearch")?.value||"").toLowerCase(), st=$("orderStatusFilter")?.value||"All";
+  const list=orders.filter(o=>(o.orderNumber||o.id||"").toLowerCase().includes(q)||(o.customer?.name||"").toLowerCase().includes(q)) .filter(o=>st==="All"||o.status===st);
+  $("ordersBody").innerHTML=list.length?list.map(o=>`<tr>
+    <td><strong>${escapeHtml(o.orderNumber||o.id)}</strong></td>
+    <td>${escapeHtml(o.customer?.name||"-")}<div style="color:#7a8596">${escapeHtml(o.customer?.phone||"")}</div></td>
+    <td><div class="order-items">${(o.items||[]).map(i=>`${escapeHtml(i.name||"Product")} × ${i.quantity||1}`).join("<br>")||"-"}</div></td>
+    <td><strong>${money(o.total)}</strong></td><td>${escapeHtml(o.payment||"-")}</td>
+    <td><select class="status-select" onchange="changeOrderStatus('${o.id}',this.value)">${["Pending","Processing","Shipped","Delivered","Cancelled"].map(s=>`<option ${s===(o.status||"Pending")?"selected":""}>${s}</option>`).join("")}</select></td>
+    <td>${escapeHtml(o.date||"-")}</td>
+  </tr>`).join(""):`<tr><td colspan="7" class="empty">No orders found.</td></tr>`;
+};
+
+window.changeOrderStatus=async function(id,status){
+  try{await updateDoc(doc(db,"orders",id),{status,updatedAt:serverTimestamp()});const o=orders.find(x=>x.id===id);if(o)o.status=status;renderOrders();renderDashboard();}catch(e){alert(e.message)}
+};
+
+window.renderCategories=function(){
+  const count={};products.forEach(p=>count[p.category]=(count[p.category]||0)+1);
+  $("categoriesBody").innerHTML=categories.map(c=>`<tr><td><strong>${escapeHtml(c.name)}</strong></td><td>${count[c.name]||0}</td><td><button class="iconbtn" onclick="renameCategory('${c.id}')">✏️</button> <button class="iconbtn" onclick="deleteCategory('${c.id}','${escapeAttr(c.name)}')">🗑️</button></td></tr>`).join("");
+};
+
+window.addCategory=async function(){
+  const name=prompt("Category name:"); if(!name?.trim())return;
+  try{await addDoc(collection(db,"categories"),{name:name.trim(),createdAt:serverTimestamp()});await loadAll();}catch(e){alert(e.message)}
+};
+window.renameCategory=async function(id){
+  const c=categories.find(x=>x.id===id), name=prompt("New category name:",c?.name||""); if(!name?.trim())return;
+  try{await updateDoc(doc(db,"categories",id),{name:name.trim(),updatedAt:serverTimestamp()});await loadAll();}catch(e){alert(e.message)}
+};
+window.deleteCategory=async function(id,name){
+  if(products.some(p=>p.category===name)){alert("This category has products. Move/delete those products first.");return}
+  if(!confirm("Delete category?"))return;
+  try{await deleteDoc(doc(db,"categories",id));await loadAll();}catch(e){alert(e.message)}
+};
+
+window.bulkPriceUpdate=async function(){
+  const cat=$("bulkCategory").value, pct=Number($("bulkPercent").value);
+  if(!Number.isFinite(pct)||pct===0){alert("Enter a valid non-zero percentage.");return}
+  const list=products.filter(p=>cat==="All"||p.category===cat);
+  if(!list.length)return alert("No products found.");
+  if(!confirm(`Apply ${pct>0?"+":""}${pct}% to ${list.length} product(s)?`))return;
+  try{
+    const batch=writeBatch(db);
+    list.forEach(p=>batch.update(doc(db,"products",p.id),{price:Math.max(0,Math.round(Number(p.price)*(1+pct/100))),updatedAt:serverTimestamp()}));
+    await batch.commit(); await loadAll(); alert("Prices updated successfully.");
+  }catch(e){alert("Bulk update failed: "+e.message)}
+};
+
+function statusBadge(s){
+  const cls=s==="Delivered"?"green":s==="Cancelled"?"red":"orange";
+  return `<span class="badge ${cls}">${escapeHtml(s)}</span>`;
+}
+function escapeHtml(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function escapeAttr(v){return escapeHtml(v)}
+
+window.addEventListener("keydown",e=>{if(e.key==="Escape")closeProductModal()});
+</script>
+</body>
+</html>
